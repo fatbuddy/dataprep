@@ -107,14 +107,23 @@ class Clusterer:
         counts = self._df[self._col].value_counts(sort=False)
         # create dataframe containing unique values
         df = counts.index.to_frame(name=self._col)
+            # Print statement before creating blocks
+        print("Creating blocks with block size:", self._block_size)
         # put strings in blocks
         populate_blocks = df[self._col].apply(
             self._populate_blocks, args=(blocks, self._block_size), meta=(self._col, "object")
         )
+        print("Blocks prepared, computing...")
         _, self._counts = dask.compute(populate_blocks, counts)
+        # Since blocks are populated in _populate_blocks, print after compute
+        print("Blocks created, sample block:", list(blocks.items())[0] if blocks else "No blocks created")
 
+        # Before creating clusters
+        print("Starting nearest neighbour clustering with radius:", self._radius)
         # compare strings in the same block and create clusters
         self.clusters = self._get_nearest_neighbour_clusters(blocks, self._radius)
+        # After clusters are created
+        print("Clusters formed, sample cluster:", self.clusters.iloc[0] if not self.clusters.empty else "No clusters formed")
 
     @staticmethod
     def _populate_blocks(val: str, blocks: DefaultDict[str, Set[str]], block_size: int) -> None:
@@ -144,6 +153,7 @@ class Clusterer:
 
                 cluster_map[center].add(center)
                 dist = LevenshteinDistance(center, val)
+                print(f"Distance between '{center}' and '{val}': {dist}")
                 if dist <= radius or radius < 0:
                     cluster_map[center].add(val)
 
