@@ -14,11 +14,11 @@ on:
         - debug
   push:
     branches:
-      - develop
+      - aftertest
       - release
   pull_request:
     branches:
-      - develop
+      - aftertest
 
 jobs:
   build:
