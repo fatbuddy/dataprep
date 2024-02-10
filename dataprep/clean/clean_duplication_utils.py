@@ -127,6 +127,7 @@ class Clusterer:
             if token not in blocks:
                 blocks[token] = set()
             blocks[token].add(val)
+        print(f"After adding '{val}', blocks now has: {dict(blocks)}")
 
     @staticmethod
     def _get_nearest_neighbour_clusters(
