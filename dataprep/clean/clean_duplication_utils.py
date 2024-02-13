@@ -145,6 +145,8 @@ class Clusterer:
 
                 cluster_map[center].add(center)
                 dist = LevenshteinDistance(center, val)
+                print(f"Distance between '{center}' and '{val}': {dist}")
+
                 if dist <= radius or radius < 0:
                     cluster_map[center].add(val)
 
