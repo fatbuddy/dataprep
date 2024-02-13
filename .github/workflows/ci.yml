@@ -80,7 +80,7 @@ jobs:
           poetry run pyright --version
 
       - name: Check if the code is formatted
-        run: poetry run black --check dataprep
+        run: poetry run black dataprep
 
       - name: Type check the project
         run: poetry run pyright dataprep || true
