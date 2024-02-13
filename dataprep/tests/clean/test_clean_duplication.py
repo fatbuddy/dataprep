@@ -1,44 +1,44 @@
-# """
-# module for testing the clean_duplication() function
-# """
-# import logging
+"""
+module for testing the clean_duplication() function
+"""
+import logging
 
-# import numpy as np
-# import pandas as pd
-# import pytest
+import numpy as np
+import pandas as pd
+import pytest
 
-# from ...clean.clean_duplication import UserInterface
+from ...clean.clean_duplication import UserInterface
 
-# LOGGER = logging.getLogger(__name__)
+LOGGER = logging.getLogger(__name__)
 
 
-# @pytest.fixture(scope="module")  # type: ignore
-# def clean_duplication_ui() -> UserInterface:
-#     df = pd.DataFrame(
-#         {
-#             "city": [
-#                 "Québec",
-#                 "Québec",
-#                 "Québec",
-#                 "Quebec",
-#                 "Quebec",
-#                 "quebec",
-#                 "vancouver",
-#                 "vancouver",
-#                 "vancouverr",
-#                 "Vancouver",
-#                 "Vancouver",
-#                 "Vancouver",
-#                 "van",
-#                 "Ottowa",
-#                 "Ottowa",
-#                 "otowa",
-#                 "hello",
-#                 np.nan,
-#             ]
-#         }
-#     )
-#     return UserInterface(df, "city", "df", 5)
+@pytest.fixture(scope="module")  # type: ignore
+def clean_duplication_ui() -> UserInterface:
+    df = pd.DataFrame(
+        {
+            "city": [
+                "Québec",
+                "Québec",
+                "Québec",
+                "Quebec",
+                "Quebec",
+                "quebec",
+                "vancouver",
+                "vancouver",
+                "vancouverr",
+                "Vancouver",
+                "Vancouver",
+                "Vancouver",
+                "van",
+                "Ottowa",
+                "Ottowa",
+                "otowa",
+                "hello",
+                np.nan,
+            ]
+        }
+    )
+    return UserInterface(df, "city", "df", 5)
 
 
 # def test_fingerprint_clusters(clean_duplication_ui: UserInterface) -> None:
