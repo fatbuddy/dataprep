@@ -121,15 +121,15 @@ def test_levenshtein_clusters(clean_duplication_ui: UserInterface) -> None:
     # check for either ordering of clusters, since they're
     # only sorted by the length of the cluster the order isn't
     # guaranteed
-    print("cluster check 1")
+    print("clusters",clusters)
     clusters_check = pd.Series(
         [
-            [("Québec", 3), ("Quebec", 2), ("quebec", 1)],
+            [("Québec", 3), ("Quebec", 2), ("quebec", 1)],s
             [("Vancouver", 3), ("vancouver", 2), ("vancouverr", 1)],
         ],
         name="city",
     )
-    print("cluster check 2")
+    
     clusters_check2 = pd.Series(
         [
             [("Vancouver", 3), ("vancouver", 2), ("vancouverr", 1)],
@@ -139,7 +139,7 @@ def test_levenshtein_clusters(clean_duplication_ui: UserInterface) -> None:
     )
     clean_duplication_ui._block_chars_text.value = "7"
     clusters2 = clean_duplication_ui._clusterer.get_page(0, 5)
-    print("cluster check 3")
+    print("clusters2", clusters2)
     clusters_check3 = pd.Series(
         [[("Vancouver", 3), ("vancouver", 2), ("vancouverr", 1)]],
         name="city",
