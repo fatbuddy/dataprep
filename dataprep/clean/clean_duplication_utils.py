@@ -138,6 +138,7 @@ class Clusterer:
         their distance is less than the given radius.
         """
         cluster_map: DefaultDict[str, Set[str]] = defaultdict(set)
+        print(f"Cluster before levenshetein: {cluster}, Length: {len(cluster)}")
         for block in blocks.values():
             for center, val in permutations(block, 2):
                 if val in cluster_map[center]:
