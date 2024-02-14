@@ -138,7 +138,7 @@ class Clusterer:
         their distance is less than the given radius.
         """
         cluster_map: DefaultDict[str, Set[str]] = defaultdict(set)
-        print(f"Cluster before levenshetein: {cluster}, Length: {len(cluster)}")
+
         for block in blocks.values():
             for center, val in permutations(block, 2):
                 if val in cluster_map[center]:
@@ -146,10 +146,12 @@ class Clusterer:
 
                 cluster_map[center].add(center)
                 dist = LevenshteinDistance(center, val)
-                #print(f"Distance between '{center}' and '{val}': {dist}")
+                print(f"Distance between '{center}' and '{val}': {dist}")
 
                 if dist <= radius or radius < 0:
                     cluster_map[center].add(val)
+                print(f"After comparing '{center}' and '{val}', cluster_map[{center}]: {cluster_map[center]}")
+            print("---- End of block ----\n")
         # Iterate through each cluster in the cluster_map
         for cluster in cluster_map.values():
         # Check if the cluster length is greater than 1
