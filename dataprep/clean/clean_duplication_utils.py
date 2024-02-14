@@ -173,6 +173,8 @@ class Clusterer:
             blocks: DefaultDict[str, Set[str]], radius: int
     ) -> pd.Series:
         cluster_map: DefaultDict[str, Set[str]] = defaultdict(set)
+        print("Starting cluster processing...")  # Before starting the loop
+
         try:
             for block in blocks.values():
                 for center, val in permutations(block, 2):
@@ -183,13 +185,21 @@ class Clusterer:
                     dist = LevenshteinDistance(center, val)
                     if dist <= radius or radius < 0:
                         cluster_map[center].add(val)
+                print("End of block processing.\n")  # After each block processing
+            print("All blocks processed. Forming unique clusters...")  # Before forming unique clusters
 
             unique_clusters = set(
                 frozenset(cluster) for cluster in cluster_map.values() if len(cluster) > 1
             )
 
+            # Print before final sorting and conversion
+            print(f"Unique clusters formed: {len(unique_clusters)}")
+
             clusters = [list(cluster) for cluster in unique_clusters]
             sorted_clusters = pd.Series(sorted(clusters, key=len, reverse=True))
+
+            print("Finished processing clusters.")  # After all processing
+            
             return sorted_clusters
 
         except Exception as e:
