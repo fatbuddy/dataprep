@@ -139,26 +139,63 @@ class Clusterer:
         """
         cluster_map: DefaultDict[str, Set[str]] = defaultdict(set)
 
-        for block in blocks.values():
-            for center, val in permutations(block, 2):
-                if val in cluster_map[center]:
-                    continue
+        # for block in blocks.values():
+        #     for center, val in permutations(block, 2):
+        #         if val in cluster_map[center]:
+        #             continue
 
-                cluster_map[center].add(center)
-                dist = LevenshteinDistance(center, val)
-                print(f"Distance between '{center}' and '{val}': {dist}")
+        #         cluster_map[center].add(center)
+        #         dist = LevenshteinDistance(center, val)
+        #         print(f"Distance between '{center}' and '{val}': {dist}")
 
-                if dist <= radius or radius < 0:
-                    cluster_map[center].add(val)
-                print(f"After comparing '{center}' and '{val}', cluster_map[{center}]: {cluster_map[center]}")
-            print("---- End of block ----\n")
-        # Iterate through each cluster in the cluster_map
-        for cluster in cluster_map.values():
-        # Check if the cluster length is greater than 1
-            if len(cluster) > 1:
-                # Print the cluster and its length
-                print(f"Cluster before frozenset: {cluster}, Length: {len(cluster)}")
-        # remove duplicate clusters and clusters of length 1
+        #         if dist <= radius or radius < 0:
+        #             cluster_map[center].add(val)
+        #         print(f"After comparing '{center}' and '{val}', cluster_map[{center}]: {cluster_map[center]}")
+        #     print("---- End of block ----\n")
+        # # Iterate through each cluster in the cluster_map
+        # for cluster in cluster_map.values():
+        # # Check if the cluster length is greater than 1
+        #     if len(cluster) > 1:
+        #         # Print the cluster and its length
+        #         print(f"Cluster before frozenset: {cluster}, Length: {len(cluster)}")
+        # # remove duplicate clusters and clusters of length 1
+        try:
+            for block in blocks.values():
+                for center, val in permutations(block, 2):
+                    if val in cluster_map[center]:
+                        continue
+
+                    cluster_map[center].add(center)
+                    dist = LevenshteinDistance(center, val)
+                    print(f"Distance between '{center}' and '{val}': {dist}")
+
+                    if dist <= radius or radius < 0:
+                        cluster_map[center].add(val)
+                    print(f"After comparing '{center}' and '{val}', cluster_map[{center}]: {cluster_map[center]}")
+                print("---- End of block ----\n")
+
+            # Iterate through each cluster in the cluster_map
+            for cluster in cluster_map.values():
+                # Check if the cluster length is greater than 1
+                if len(cluster) > 1:
+                    # Print the cluster and its length
+                    print(f"Cluster before frozenset: {cluster}, Length: {len(cluster)}")
+
+            # remove duplicate clusters and clusters of length 1
+            unique_clusters = set(
+                frozenset(cluster) for cluster in cluster_map.values() if len(cluster) > 1
+            )
+            print(unique_clusters)
+
+            # convert to list of lists
+            clusters = [list(cluster) for cluster in unique_clusters]
+            # sort by the size of each cluster, so that larger clusters appear first
+            return pd.Series(sorted(clusters, key=len, reverse=True))
+        
+        except Exception as e:
+            print(f"An error occurred: {e}")
+            # Depending on your context, you might want to raise the exception or return an empty pd.Series
+            raise e  # or return pd.Series([])
         unique_clusters = set(
             frozenset(cluster) for cluster in cluster_map.values() if len(cluster) > 1
         )
