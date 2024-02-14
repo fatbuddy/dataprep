@@ -145,7 +145,7 @@ class Clusterer:
 
                 cluster_map[center].add(center)
                 dist = LevenshteinDistance(center, val)
-                print(f"Distance between '{center}' and '{val}': {dist}")
+                #print(f"Distance between '{center}' and '{val}': {dist}")
 
                 if dist <= radius or radius < 0:
                     cluster_map[center].add(val)
@@ -154,6 +154,7 @@ class Clusterer:
         unique_clusters = set(
             frozenset(cluster) for cluster in cluster_map.values() if len(cluster) > 1
         )
+        print(unique_clusters)
         # convert to list of lists
         clusters = [list(cluster) for cluster in unique_clusters]
         # sort by the size of each cluster, so that larger clusters appear first
