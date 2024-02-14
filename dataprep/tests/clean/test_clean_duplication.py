@@ -139,14 +139,14 @@ def test_levenshtein_clusters(clean_duplication_ui: UserInterface) -> None:
         name="city",
     )
     clean_duplication_ui._block_chars_text.value = "7"
-    # clusters2 = clean_duplication_ui._clusterer.get_page(0, 5)
-    # print("clusters2", clusters2)
-    # clusters_check3 = pd.Series(
-    #     [[("Vancouver", 3), ("vancouver", 2), ("vancouverr", 1)]],
-    #     name="city",
-    # )
+    clusters2 = clean_duplication_ui._clusterer.get_page(0, 5)
+    print("clusters2", clusters2)
+    clusters_check3 = pd.Series(
+        [[("Vancouver", 3), ("vancouver", 2), ("vancouverr", 1)]],
+        name="city",
+    )
     assert clusters_check.equals(clusters) or clusters_check2.equals(clusters)
-    # assert clusters_check3.equals(clusters2)
+    assert clusters_check3.equals(clusters2)
 
 
 # def test_merge(clean_duplication_ui: UserInterface) -> None:
