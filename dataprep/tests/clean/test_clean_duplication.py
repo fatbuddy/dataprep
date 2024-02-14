@@ -52,41 +52,41 @@ def clean_duplication_ui() -> UserInterface:
 #     assert clusters_check.equals(clusters)
 
 
-# def test_ngram_clusters(clean_duplication_ui: UserInterface) -> None:
-#     clean_duplication_ui._clustering_method_drop.value = "ngram-fingerprint"
-#     clusters = clean_duplication_ui._clusterer.get_page(0, 5)
-#     clusters_check = pd.Series(
-#         [
-#             [("Québec", 3), ("Quebec", 2), ("quebec", 1)],
-#             [("Vancouver", 3), ("vancouver", 2)],
-#         ],
-#         name="city",
-#     )
-#     # set the ngram size to 1
-#     clean_duplication_ui._ngram_text.value = "1"
-#     clusters2 = clean_duplication_ui._clusterer.get_page(0, 5)
-#     # check for either ordering of clusters, since they're
-#     # only sorted by the length of the cluster the order isn't
-#     # guaranteed
-#     clusters_check2 = pd.Series(
-#         [
-#             [("Québec", 3), ("Quebec", 2), ("quebec", 1)],
-#             [("Vancouver", 3), ("vancouver", 2), ("vancouverr", 1)],
-#             [("Ottowa", 2), ("otowa", 1)],
-#         ],
-#         name="city",
-#     )
-#     clusters_check3 = pd.Series(
-#         [
-#             [("Vancouver", 3), ("vancouver", 2), ("vancouverr", 1)],
-#             [("Québec", 3), ("Quebec", 2), ("quebec", 1)],
-#             [("Ottowa", 2), ("otowa", 1)],
-#         ],
-#         name="city",
-#     )
+def test_ngram_clusters(clean_duplication_ui: UserInterface) -> None:
+    clean_duplication_ui._clustering_method_drop.value = "ngram-fingerprint"
+    clusters = clean_duplication_ui._clusterer.get_page(0, 5)
+    clusters_check = pd.Series(
+        [
+            [("Québec", 3), ("Quebec", 2), ("quebec", 1)],
+            [("Vancouver", 3), ("vancouver", 2)],
+        ],
+        name="city",
+    )
+    # set the ngram size to 1
+    clean_duplication_ui._ngram_text.value = "1"
+    clusters2 = clean_duplication_ui._clusterer.get_page(0, 5)
+    # check for either ordering of clusters, since they're
+    # only sorted by the length of the cluster the order isn't
+    # guaranteed
+    clusters_check2 = pd.Series(
+        [
+            [("Québec", 3), ("Quebec", 2), ("quebec", 1)],
+            [("Vancouver", 3), ("vancouver", 2), ("vancouverr", 1)],
+            [("Ottowa", 2), ("otowa", 1)],
+        ],
+        name="city",
+    )
+    clusters_check3 = pd.Series(
+        [
+            [("Vancouver", 3), ("vancouver", 2), ("vancouverr", 1)],
+            [("Québec", 3), ("Quebec", 2), ("quebec", 1)],
+            [("Ottowa", 2), ("otowa", 1)],
+        ],
+        name="city",
+    )
 
-#     assert clusters_check.equals(clusters)
-#     assert clusters_check2.equals(clusters2) or clusters_check3.equals(clusters2)
+    assert clusters_check.equals(clusters)
+    assert clusters_check2.equals(clusters2) or clusters_check3.equals(clusters2)
 
 
 # def test_phonetic_clusters(clean_duplication_ui: UserInterface) -> None:
@@ -117,6 +117,7 @@ def clean_duplication_ui() -> UserInterface:
 
 def test_levenshtein_clusters(clean_duplication_ui: UserInterface) -> None:
     clean_duplication_ui._clustering_method_drop.value = "levenshtein"
+
     clusters = clean_duplication_ui._clusterer.get_page(0, 5)
     # check for either ordering of clusters, since they're
     # only sorted by the length of the cluster the order isn't
@@ -124,7 +125,7 @@ def test_levenshtein_clusters(clean_duplication_ui: UserInterface) -> None:
     print("clusters",clusters)
     clusters_check = pd.Series(
         [
-            [("Québec", 3), ("Quebec", 2), ("quebec", 1)],s
+            [("Québec", 3), ("Quebec", 2), ("quebec", 1)],
             [("Vancouver", 3), ("vancouver", 2), ("vancouverr", 1)],
         ],
         name="city",
@@ -137,7 +138,7 @@ def test_levenshtein_clusters(clean_duplication_ui: UserInterface) -> None:
         ],
         name="city",
     )
-    # clean_duplication_ui._block_chars_text.value = "7"
+    clean_duplication_ui._block_chars_text.value = "7"
     # clusters2 = clean_duplication_ui._clusterer.get_page(0, 5)
     # print("clusters2", clusters2)
     # clusters_check3 = pd.Series(
@@ -179,7 +180,7 @@ def test_levenshtein_clusters(clean_duplication_ui: UserInterface) -> None:
 #         "nan",
 #     ]
 
-    assert df_check.equals(df_clean)
+#    assert df_check.equals(df_clean)
 
 
 # def test_select_all(clean_duplication_ui: UserInterface) -> None:

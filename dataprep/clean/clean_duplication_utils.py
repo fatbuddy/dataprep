@@ -149,7 +149,12 @@ class Clusterer:
 
                 if dist <= radius or radius < 0:
                     cluster_map[center].add(val)
-
+        # Iterate through each cluster in the cluster_map
+        for cluster in cluster_map.values():
+        # Check if the cluster length is greater than 1
+            if len(cluster) > 1:
+                # Print the cluster and its length
+                print(f"Cluster before frozenset: {cluster}, Length: {len(cluster)}")
         # remove duplicate clusters and clusters of length 1
         unique_clusters = set(
             frozenset(cluster) for cluster in cluster_map.values() if len(cluster) > 1
