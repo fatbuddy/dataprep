@@ -172,6 +172,10 @@ class Clusterer:
     def _get_nearest_neighbour_clusters(
             blocks: DefaultDict[str, Set[str]], radius: int
     ) -> pd.Series:
+        
+        for block_key, block_values in blocks.items():
+            print(f"Block '{block_key}': {block_values}")
+
         cluster_map: DefaultDict[str, Set[str]] = defaultdict(set)
         print("Starting cluster processing...")  # Before starting the loop
 
@@ -199,7 +203,7 @@ class Clusterer:
             sorted_clusters = pd.Series(sorted(clusters, key=len, reverse=True))
 
             print("Finished processing clusters.")  # After all processing
-            
+
             return sorted_clusters
 
         except Exception as e:
