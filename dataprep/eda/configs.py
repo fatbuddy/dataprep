@@ -1119,8 +1119,6 @@ class Violin(BaseModel):
         ]
         return [(f"'{name}': {val}", desc) for name, val, desc in zip(names, vals, descs)]
 
-# Usage in your main code
-violin_config = Violin(scale="count", inner="stick", palette=["#E24A33", "#348ABD", "#988ED5"], width=600, height=400)
 
 
 def _form(val: Any) -> Any:
@@ -1237,6 +1235,7 @@ class Config(BaseModel):
     correlations: Correlations = Field(default_factory=Correlations)
     missingvalues: MissingValues = Field(default_factory=MissingValues)
     diff: Diff = Field(default_factory=Diff)
+    violin: Violin = Field(default_factory=Violin)
 
     def _set_enable_for_plots(self, display: List[str]) -> None:
         """set the enable for all plots from display, used for 'from_dict' constructor"""
