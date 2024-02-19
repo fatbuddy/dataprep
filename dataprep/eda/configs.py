@@ -48,9 +48,11 @@ DISPLAY_MAP = {
     "KendallTau": "kendall",
     "Spectrum": "spectrum",
     "Dendrogram": "dendro",
+    "Violin Plot": "violin",
     "PDF": "pdf",
     "CDF": "cdf",
     "Value Table": "value_table",
+
 }
 
 # This dictionary map is used for session control in create_report
@@ -1078,6 +1080,47 @@ class ValueTable(BaseModel):
         names = ["value_table.ngroups"]
         descs = ["The number of distinct values to show"]
         return [(f"'{name}': {_form(val)}", desc) for name, val, desc in zip(names, vals, descs)]
+
+class Violin(BaseModel):
+    """
+    enable: bool, default True
+        Whether to create this element
+    scale: str, default "area"
+        The method used to scale the width of each violin.
+    inner: Optional[str], default "quartile"
+        Representation of the quartiles.
+    palette: Optional[List[str]], default None
+        List of colors to use for the different categories.
+    height: Union[int, str], default "auto"
+        Height of the plot.
+    width: Union[int, str], default "auto"
+        Width of the plot.
+    """
+
+    enable: bool = True
+    scale: str = "area"
+    inner: Optional[str] = "quartile"
+    palette: Optional[List[str]] = None
+    width: Union[int, str] = "auto"
+    height: Union[int, str] = "auto"
+
+    def how_to_guide(self) -> List[Tuple[str, str]]:
+        """
+        how-to guide for violin plot
+        """
+        vals = [self.scale, self.inner, self.palette, self.height, self.width]
+        names = ["violin.scale", "violin.inner", "violin.palette", "height", "width"]
+        descs = [
+            "The method used to scale the width of each violin",
+            "Representation of the quartiles within the violin",
+            "List of colors to use for the different categories",
+            "Height of the plot",
+            "Width of the plot",
+        ]
+        return [(f"'{name}': {val}", desc) for name, val, desc in zip(names, vals, descs)]
+
+# Usage in your main code
+violin_config = Violin(scale="count", inner="stick", palette=["#E24A33", "#348ABD", "#988ED5"], width=600, height=400)
 
 
 def _form(val: Any) -> Any:
