@@ -114,8 +114,11 @@ def test_empty() -> None:
 
 
 def test_cat_df() -> None:
+    report_file = tmp_path / "report.html"
     df = load_dataset("titanic")
     ddf = df[["Name", "Sex"]]
     report = create_report(ddf)
-    report.show_browser()
+    report.save(str(report_file))
+    print(f"Report saved to {report_file}")
+
 
