@@ -112,13 +112,14 @@ def test_empty() -> None:
     df = pd.DataFrame()
     create_report(df)
 
-
-def test_cat_df() -> None:
+@pytest.fixture(scope = 'module')
+def test_cat_df(tmp_path):
     report_file = tmp_path / "report.html"
     df = load_dataset("titanic")
     ddf = df[["Name", "Sex"]]
     report = create_report(ddf)
     report.save(str(report_file))
     print(f"Report saved to {report_file}")
+    return report_file
 
 
