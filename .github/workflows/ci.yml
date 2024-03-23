@@ -73,6 +73,7 @@ jobs:
           echo "Cache Version ${{ secrets.CACHE_VERSION }}"
           poetry install
           poetry run pip install ERAlchemy2
+          poetry run pip install pytest
           poetry config --list
 
       - name: Print tool versions
