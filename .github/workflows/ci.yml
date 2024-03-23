@@ -115,16 +115,23 @@ jobs:
           project-token: ${{ secrets.CODACY_PROJECT_TOKEN }}
           coverage-reports: coverage.xml
       
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install pytest
+          
+
       - name: Run create_report test
         run: |
           cd dataprep/tests/eda
           pytest test_create_report.py
       
       #if a test save the report as a html file, upload it as an artifact
-      - name: Upload report
+      - name: Upload HTML report
+        if: success()
         uses: actions/upload-artifact@v2
         with:
-          name: report
+          name: HTML-report
           path: dataprep/tests/eda/report.html
 
   docs-build:

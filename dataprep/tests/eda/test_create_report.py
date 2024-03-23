@@ -1,7 +1,7 @@
 """
     module for testing create_report(df) function.
 """
-
+import os
 import logging
 import numpy as np
 import pandas as pd
@@ -114,12 +114,15 @@ def test_empty() -> None:
 
 @pytest.fixture(scope = 'module')
 def test_cat_df(tmp_path):
-    report_file = tmp_path / "report.html"
+    report_file = "dataprep/tests/eda/report.html"
+    
     df = load_dataset("titanic")
     ddf = df[["Name", "Sex"]]
     report = create_report(ddf)
-    report.save(str(report_file))
+
+    os.makedirs(os.path.dirname(report_file), exist_ok=True)
+    report.save(report_file)
     print(f"Report saved to {report_file}")
-    return report_file
+
 
 
