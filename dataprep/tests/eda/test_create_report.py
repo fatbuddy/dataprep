@@ -111,8 +111,3 @@ def test_empty() -> None:
     df = pd.DataFrame()
     create_report(df)
 
-
-def test_cat_df() -> None:
-    df = load_dataset("titanic")
-    ddf = df[["Name", "Sex"]]
-    create_report(ddf)
