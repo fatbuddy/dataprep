@@ -73,7 +73,6 @@ jobs:
           echo "Cache Version ${{ secrets.CACHE_VERSION }}"
           poetry install
           poetry run pip install ERAlchemy2
-          poetry run pip install pytest
           poetry config --list
 
       - name: Print tool versions
@@ -119,7 +118,7 @@ jobs:
       - name: Run create_report test
         run: |
           cd dataprep/tests/eda
-          pytest test_create_report.py
+          poetry run pytest test_create_report.py
       
       #if a test save the report as a html file, upload it as an artifact
       - name: Upload HTML report
