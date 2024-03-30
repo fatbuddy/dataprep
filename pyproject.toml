@@ -8,9 +8,11 @@ maintainers = [
   "Brandon Lockhart <brandon_lockhart@sfu.ca>",
   "Song Bian <biansonghz@gmail.com>",
   "Danrui Qi <qidanrui@gmail.com>",
+  "Wenbin Li <freyalisfu@gmail.com>",
+  "Alvin Lam <hfl6@sfu.ca>"
 ]
 name = "dataprep"
-version = "0.4.5"
+version = "0.4.6"
 
 license = "MIT"
 
