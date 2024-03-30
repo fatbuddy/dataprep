@@ -45,8 +45,8 @@ bokeh = "^2"
 dask = {version = ">=2022.3.0", extras = ["array", "dataframe", "delayed"]}
 nltk = "^3.6.7"
 numpy = [
-  {version = ">=1.21", python = "<3.12"},
-  {version = ">=1.26", python = ">=3.12"}
+  {version = "^1.24", python = "<3.9"},
+  {version = "^1.26", python = ">=3.9"}
 ]
 pandas = "^1.1"
 pydot = "^1.4.2"
