@@ -326,7 +326,7 @@ class Violin(BaseModel):
     width: Union[int, None] = None
     height: Union[int, None] = None
     sort_descending: bool = True
-    color: str = "#1f77b4"
+    color: str = "#4a8c5f"
     #max_width: Union[float, None] = None
 
     # Example method for a how-to guide, similar to other plot configs

@@ -515,10 +515,11 @@ def kde_viz(
 
 def violin_viz(
     hist: Tuple[np.ndarray, np.ndarray],
+    col: str,
     plot_width: int,
     plot_height: int,
     violin_cfg: Violin,
-    box_data = pd.DataFrame,
+    df:pd.DataFrame,
 ) -> Panel:
     """
     # Render a violin plot using histogram data for density representation.
@@ -549,61 +550,62 @@ def violin_viz(
 
     # Prepare the coordinates for the violin plot
     midpoints = (bin_edges[:-1] + bin_edges[1:]) / 2  # Midpoints of bins
-    # x_values = np.concatenate([midpoints, midpoints[::-1]])
+    x_values = np.concatenate([midpoints, midpoints[::-1]])
     y_values = np.concatenate([scaled_densities, -scaled_densities[::-1]])
-    # Add box plot elements (median, quartiles) in the center of the violin plot if needed
-    
-    width = 0.7
-    x_position = 0
-    #create source data dictionary for hovertool
-    source_bins = ColumnDataSource(data={
-        'x': np.concatenate(([x_position - 0.5 * width] * len(midpoints), [x_position + 0.5 * width] * len(midpoints[::-1]))).tolist(),
+
+    source_bins = ColumnDataSource(
+        data={
+        'x': x_values.tolist(),
         'y': y_values.tolist(),
         'density': np.concatenate([densities, densities]).tolist(),
-        # Additional fields for hover
+        # Additional fields for hover can be included here
     })
-    source_box = ColumnDataSource(data = box_data)
-    #box widths
     
-    # Initialize figure
-    fig = figure(plot_width=plot_width, plot_height=plot_height, toolbar_location=None)
-    # Add violin glyph
-    bins_renderers = fig.patch('x', 'y', source=source_bins, fill_color="#a6cee3")
-   
+    fig = figure(
+    plot_width=plot_width, 
+    plot_height=plot_height, 
+    title=col)
 
-    # Add the box plot glyphs at the fixed x position
-    lowerbox = fig.vbar(
-        x= x_position,
-        width=width,
-        top="q2",
-        bottom="q1",    
+    fig.yaxis.axis_label = "Density"
+    fig.xaxis.axis_label = col
+
+    glyph = Patch(x = "x", y = "y", fill_color = "#a6cee3")
+
+    fig.add_glyph(source_bins, glyph)
+    
+    # _format_axis(fig, min_x, max_x, axis="x") #format x
+    # _format_axis(fig, min_y, max_y, "y") #format y
+    
+    source_box = ColumnDataSource(df)
+    height = 0.06* max_density
+    neg_height = -0.06*max_density
+    x_position = 0
+    lowerwhisk = fig.segment(x0 = "lw",y0=x_position, x1 = "q1", y1 = x_position,line_color="black", source=source_box)
+    upperwhisk = fig.segment(x0="uw",y0=x_position, x1="q3", y1 = x_position, line_color="black", source=source_box)
+    lowerbox = fig.hbar(
+        y = x_position,
+        height = height,
+        right="q2",
+        left="q1",    
         fill_color=violin_cfg.color,
         line_color="black",
         source=source_box,
     )
-    upperbox = fig.vbar(
-        x= x_position,
-        width=width,
-        top="q3",
-        bottom="q2",
+
+    upperbox = fig.hbar(
+        y = x_position,
+        height = height,
+        right="q3",
+        left="q2",
         fill_color=violin_cfg.color,
         line_color="black",
         source=source_box,
     )
-    #df["x0"],df["x1"] = df.index + 0.2, df.index + 0.8
+    uppertail = fig.segment(x0="uw",y0= 0.5*height, x1="uw", y1 = 0.5*neg_height, line_color="black", source=source_box)
+    lowertail = fig.segment(x0 = "lw",y0= 0.5*height, x1 = "lw", y1 = 0.5*neg_height,line_color="black", source=source_box)
 
-    lowerwhisk = fig.segment(x0=x_position, y0="lw", x1=x_position, y1="q1", line_color="black", source=source_box)
-
-    upperwhisk = fig.segment(x0=x_position, y0="uw", x1=x_position, y1="q3", line_color="black", source=source_box)
-    
-    hover_bins = HoverTool(
-        renderers = [bins_renderers],
-        tooltips= [       
-        ("X value", "@x"),
-        ("Scaled Density", "@y"),
-        ("Original Density", "@density"),])
-
-    box_renderers = [lowerbox, upperbox, lowerwhisk, upperwhisk]
+    box_renderers = [lowerbox, upperbox, lowerwhisk, upperwhisk, uppertail, lowertail]
+    #box_renderers = [lowerbox, upperbox]
     hover_box = HoverTool(
         renderers = box_renderers,
         tooltips = [
@@ -614,10 +616,9 @@ def violin_viz(
         ("Lower Whisker", "@lw"),
     ])
     # Add hover tool to figure
-    fig.add_tools(hover_bins)
-    # fig.add_tools(hover_box)
-
-    return Panel(child=row(fig), title="Violin Plot")      
+    # #fig.add_tools(hover_bins)
+    fig.add_tools(hover_box)
+    return Panel(child=row(fig), title="Violin Plot")
 
 # def violin_viz(
 #     hist: Tuple[np.ndarray, np.ndarray],
@@ -625,6 +626,118 @@ def violin_viz(
 #     plot_width: int,
 #     plot_height: int,
 #     violin_cfg: Violin,
+#     box_data = pd.DataFrame,
+# ) -> Panel:
+#     """
+#     # Render a violin plot using histogram data for density representation.
+    
+#     # Parameters:
+#     # - hist: Tuple containing histogram density (counts) and bins
+#     # - col: Column name for the data
+#     # - plot_width: Width of the plot
+#     # - plot_height: Height of the plot
+#     # - violin_cfg: Configuration object for the violin plot, similar to kde_cfg
+#     # """
+
+#     #counts, bin_edges = np.histogram(data, bins=30)
+    
+#     # Extract histogram counts and bin edges
+#     counts, bin_edges = hist
+
+#     # Calculate the width of each bin
+#     bin_widths = np.diff(bin_edges)
+
+#     # Convert counts to densities (normalized by bin width and total count)
+#     densities = counts / (bin_widths * counts.sum())
+#     # Find the maximum density
+#     max_density = densities.max()
+#     # Scale the densities using the max_width from violin_cfg
+#     max_width = getattr(violin_cfg, 'max_width', max_density)  # Use max_density if max_width is not set
+#     scaled_densities = densities / max_density * max_width
+
+#     # Prepare the coordinates for the violin plot
+#     midpoints = (bin_edges[:-1] + bin_edges[1:]) / 2  # Midpoints of bins
+#     x_values = np.concatenate([midpoints, midpoints[::-1]])
+#     y_values = np.concatenate([scaled_densities, -scaled_densities[::-1]])
+#     # Add box plot elements (median, quartiles) in the center of the violin plot if needed
+    
+#     width = 0.7
+#     x_position = 0
+#     #x_violin = [x_position] * len(midpoints) 
+#     #create source data dictionary for hovertool
+#     source_bins = ColumnDataSource(data={
+#         #'x': np.concatenate(([x_position - 0.5 * width] * len(midpoints), [x_position + 0.5 * width] * len(midpoints[::-1]))).tolist(),
+#         'x':x_values.tolist(),
+#         'y': y_values.tolist(),
+#         'density': np.concatenate([densities, densities]).tolist(),
+#         # Additional fields for hover
+#     })
+#     source_box = ColumnDataSource(data = box_data)
+#     #box widths
+    
+#     # Initialize figure
+#     fig = figure(plot_width=plot_width, plot_height=plot_height, toolbar_location=None, title = col)
+#     # Add violin glyph
+#     bins_renderers = fig.patch('x', 'y', source=source_bins, fill_color="#a6cee3")
+   
+
+#     # Add the box plot glyphs at the fixed x position
+#     lowerbox = fig.vbar(
+#         x= x_position,
+#         width=width,
+#         top="q2",
+#         bottom="q1",    
+#         fill_color=violin_cfg.color,
+#         line_color="black",
+#         source=source_box,
+#     )
+#     upperbox = fig.vbar(
+#         x= x_position,
+#         width=width,
+#         top="q3",
+#         bottom="q2",
+#         fill_color=violin_cfg.color,
+#         line_color="black",
+#         source=source_box,
+#     )
+#     #df["x0"],df["x1"] = df.index + 0.2, df.index + 0.8
+
+#     lowerwhisk = fig.segment(x0=x_position, y0="lw", x1=x_position, y1="q1", line_color="black", source=source_box)
+
+#     upperwhisk = fig.segment(x0=x_position, y0="uw", x1=x_position, y1="q3", line_color="black", source=source_box)
+    
+#     hover_bins = HoverTool(
+#         renderers = [bins_renderers],
+#         tooltips= [       
+#         ("X value", "@x"),
+#         ("Scaled Density", "@y"),
+#         ("Original Density", "@density"),])
+
+#     lowerwhisk = fig.segment(x0=x_position, y0="lw", x1=x_position, y1="q1", line_color="black", source=source_box)
+#     upperwhisk = fig.segment(x0=x_position, y0="uw", x1=x_position, y1="q3", line_color="black", source=source_box)
+#     box_renderers = [lowerbox, upperbox, lowerwhisk, upperwhisk]
+#     # hover_box = HoverTool(
+#     #     renderers = box_renderers,
+#     #     tooltips = [
+#     #     ("Upper Whisker", "@uw"),
+#     #     ("Upper Quartile", "@q3"),
+#     #     ("Median", "@q2"),
+#     #     ("Lower Quartile", "@q1"),
+#     #     ("Lower Whisker", "@lw"),
+#     # ])
+#     # Add hover tool to figure
+#     fig.add_tools(hover_bins)
+#     # fig.add_tools(hover_box)
+
+#     return Panel(child=row(fig), title="Violin Plot")      
+
+# def violin_viz(
+#     hist: Tuple[np.ndarray, np.ndarray],
+#     col: str,
+#     plot_width: int,
+#     plot_height: int,
+#     violin_cfg: Violin,
+#     #df:pd.DataFrame,
 # ) -> Panel:
 #     """
 #     # Render a violin plot using histogram data for density representation.
@@ -2178,7 +2291,7 @@ def render_num(itmdt: Intermediate, cfg: Config) -> Dict[str, Any]:
             #"otlrs": [data["otlrs"]],
         }
         df = pd.DataFrame(box_data, index = [0])
-        tabs.append(violin_viz((dens, bins), plot_width, plot_height, cfg.violin, df))
+        tabs.append(violin_viz((dens, bins), col, plot_width, plot_height, cfg.violin, df))
         htgs["Violin Plot"] = cfg.violin.how_to_guide(plot_height, plot_width)
     # if cfg.violin.enable:
     #     # Ensure the histogram data and bins are correctly referenced
