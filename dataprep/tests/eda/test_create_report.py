@@ -112,8 +112,14 @@ def test_empty() -> None:
     df = pd.DataFrame()
     create_report(df)
 
-
 def test_cat_df() -> None:
     df = load_dataset("titanic")
     ddf = df[["Name", "Sex"]]
     create_report(ddf)
+    
+def test_plotting_df(tmp_path)->None:
+    report_file = "report.html"
+    df = load_dataset("covid19")
+    report = create_report(df)
+    report.save()
+    print(f"Report saved to {report_file}")
