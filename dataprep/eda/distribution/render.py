@@ -2042,7 +2042,6 @@ def render_num(itmdt: Intermediate, cfg: Config) -> Dict[str, Any]:
     if cfg.violin.enable:
         dens, bins = data["hist"]
         box_data = {
-            # "grp": col,
             "q1": data["qrtl1"],
             "q2": data["qrtl2"],
             "q3": data["qrtl3"],
