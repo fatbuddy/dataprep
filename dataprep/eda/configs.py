@@ -36,7 +36,7 @@ DISPLAY_MAP = {
     "Violin Plot": "violin",
     "Normal Q-Q Plot": "qqnorm",
     "Box Plot": "box",
-    "Violin-Box Plot":"violin_box",
+    "Violin-Box Plot": "violin_box",
     "Line Chart": "line",
     "Stats": "stats",
     "Insights": "insight",
@@ -314,10 +314,12 @@ class KDE(BaseModel):
         ]
         return [(f"'{name}': {_form(val)}", desc) for name, val, desc in zip(names, vals, descs)]
 
+
 class Violin(BaseModel):
     """
     Configuration for the Violin Plot.
     """
+
     enable: bool = True
     bins: int = 50
     yscale: str = "linear"
@@ -327,16 +329,12 @@ class Violin(BaseModel):
     height: Union[int, None] = None
     sort_descending: bool = True
     color: str = "#4a8c5f"
-    #max_width: Union[float, None] = None
+    # max_width: Union[float, None] = None
 
     # Example method for a how-to guide, similar to other plot configs
     def how_to_guide(self, height: int, width: int) -> List[Tuple[str, str]]:
         vals = [self.bins, self.yscale, self.line_color, self.inner, height, width]
-        names = ["violin.bins",
-         "violin.yscale", 
-         "violin.color", 
-         "violin.inner", 
-         "height", "width"]
+        names = ["violin.bins", "violin.yscale", "violin.color", "violin.inner", "height", "width"]
         descs = [
             "Number of bins for density estimation",
             'Y-axis scale ("linear" or "log")',
@@ -346,6 +344,7 @@ class Violin(BaseModel):
             "Width of the plot",
         ]
         return [(f"'{name}': {_form(val)}", desc) for name, val, desc in zip(names, vals, descs)]
+
     def univar_how_to_guide(self, height: int, width: int) -> List[Tuple[str, str]]:
         """
         how-to guide for plot(df, x)
@@ -354,6 +353,7 @@ class Violin(BaseModel):
         names = ["box.color", "height", "width"]
         descs = ["Color", "Height of the plot", "Width of the plot"]
         return [(f"'{name}': {val}", desc) for name, val, desc in zip(names, vals, descs)]
+
 
 class QQNorm(BaseModel):
     """
@@ -1197,6 +1197,7 @@ class MissingValues(BaseModel):
 
     enable: bool = True
 
+
 class ViolinBox(BaseModel):
     # """
     # Aggregated configuration for creating combined violin-box plots.
@@ -1211,17 +1212,17 @@ class ViolinBox(BaseModel):
     # line_color: str = "#6baed6"
     # # Include any additional settings specific to the combined plot here
 
-        # General settings
+    # General settings
     enable: bool = True
     width: Union[int, None] = None
     height: Union[int, None] = None
-    
+
     # Violin plot specific settings
     bins: int = 50
     yscale: str = "linear"
     line_color: str = "#6baed6"
     inner: str = "box"  # Options: 'box', 'quartile', 'point', 'stick', or None
-    
+
     # Box plot specific settings
     color: str = "#1f77b4"
     sort_descending: bool = True
@@ -1230,10 +1231,28 @@ class ViolinBox(BaseModel):
         """
         Generates a how-to guide for configuring and understanding the violin-box plot.
         """
-        vals = [self.bins, self.yscale, self.line_color, self.inner,
-                self.color, self.sort_descending, self.bins, height, width]
-        names = ["violin.bins", "violin.yscale", "violin.color", "violin.inner",
-                 "box.color", "box.sort_descending", "box.bins", "height", "width"]
+        vals = [
+            self.bins,
+            self.yscale,
+            self.line_color,
+            self.inner,
+            self.color,
+            self.sort_descending,
+            self.bins,
+            height,
+            width,
+        ]
+        names = [
+            "violin.bins",
+            "violin.yscale",
+            "violin.color",
+            "violin.inner",
+            "box.color",
+            "box.sort_descending",
+            "box.bins",
+            "height",
+            "width",
+        ]
         descs = [
             "Number of bins for density estimation in the violin plot",
             'Y-axis scale for the violin plot ("linear" or "log")',
@@ -1246,8 +1265,6 @@ class ViolinBox(BaseModel):
             "Width of the plot",
         ]
         return [(f"'{name}': {val}", desc) for name, val, desc in zip(names, vals, descs)]
-
-
 
 
 class Config(BaseModel):
@@ -1290,7 +1307,7 @@ class Config(BaseModel):
     missingvalues: MissingValues = Field(default_factory=MissingValues)
     diff: Diff = Field(default_factory=Diff)
     # New combined violin-box plot configuration
-    #violin_box: ViolinBox = Field(default_factory=ViolinBox)
+    # violin_box: ViolinBox = Field(default_factory=ViolinBox)
 
     def _set_enable_for_plots(self, display: List[str]) -> None:
         """set the enable for all plots from display, used for 'from_dict' constructor"""

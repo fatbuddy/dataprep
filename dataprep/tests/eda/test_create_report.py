@@ -116,11 +116,12 @@ LOGGER = logging.getLogger(__name__)
 #     df = load_dataset("titanic")
 #     ddf = df[["Name", "Sex"]]
 #     create_report(ddf)
-    
-def test_plotting_df(tmp_path)->None:
+
+
+def test_plotting_df(tmp_path) -> None:
     report_file = "report.html"
     df = load_dataset("covid19")
-    ddf = df[['Lat','Long']]
+    ddf = df[["Lat", "Long"]]
     report = create_report(ddf)
     report.save()
     print(f"Report saved to {report_file}")
