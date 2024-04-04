@@ -530,9 +530,9 @@ def violin_viz(
     # - plot_width: Width of the plot
     # - plot_height: Height of the plot
     # - violin_cfg: Configuration object for the violin plot, similar to kde_cfg
-    # """
+    # - df: box dataframe for box and whiskers
 
-    #counts, bin_edges = np.histogram(data, bins=30)
+    """
     
     # Extract histogram counts and bin edges
     counts, bin_edges = hist
