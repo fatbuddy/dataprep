@@ -11,4 +11,4 @@ DEFAULT_PARTITIONS = 1
 
 logging.basicConfig(level=logging.INFO, format="%(message)s")
 
-__version__ = "0.4.4"
+__version__ = "0.4.6"
