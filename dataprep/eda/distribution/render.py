@@ -2053,28 +2053,6 @@ def render_num(itmdt: Intermediate, cfg: Config) -> Dict[str, Any]:
         df = pd.DataFrame(box_data, index=[0])
         tabs.append(violin_viz((dens, bins), col, plot_width, plot_height, cfg.violin, df))
         htgs["Violin Plot"] = cfg.violin.how_to_guide(plot_height, plot_width)
-    # if cfg.violin.enable:
-    #     # Ensure the histogram data and bins are correctly referenced
-    #     dens, bins = data["hist"]
-
-    #     tabs.append(violin_viz((dens, bins), col, plot_width, plot_height, cfg.violin))
-    #     htgs["Violin Plot"] = cfg.violin.how_to_guide(plot_height, plot_width)
-
-    # if cfg.violin_box.enable:
-    #     dens, bins = data ['hist']
-    #     box_data = {
-    #         "grp": col,
-    #         "q1": data["qrtl1"],
-    #         "q2": data["qrtl2"],
-    #         "q3": data["qrtl3"],
-    #         "lw": data["lw"],
-    #         "uw": data["uw"],
-    #         "otlrs": [data["otlrs"]],
-    #     }
-    #     df = pd.DataFrame(box_data, index=[0])
-
-    #     tabs.append(violin_box_viz((dens,bins), col, plot_width, plot_height, cfg.violin_box, cfg.violin_box, df))
-    #     htgs["Violin-Box Plot"] = cfg.violin_box.how_to_guide(plot_height, plot_width)
 
     if cfg.qqnorm.enable and (not math.isclose(data["min"], data["max"])):
         # when the column is constant, we wont display qq plot
