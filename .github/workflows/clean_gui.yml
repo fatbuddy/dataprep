@@ -3,11 +3,11 @@ name: Clean GUI CI
 on:
   push:
     branches:
-      - develop
+      - distribution
       - release
   pull_request:
     branches:
-      - develop
+      - distribution
 
 jobs:
   build:

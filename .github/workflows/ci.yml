@@ -14,12 +14,12 @@ on:
         - debug
   push:
     branches:
-      - develop
+      - distribution
       - dev
       - release
   pull_request:
     branches:
-      - develop
+      - distribution
 
 jobs:
   build:
